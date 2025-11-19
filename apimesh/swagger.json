@@ -1,0 +1,4602 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "mern-admin",
+    "version": "1.0.0",
+    "description": "This Swagger file was generated using OpenAI GPT.",
+    "generated_at": "2025-11-19T07:56:59.562974Z",
+    "commit_reference": "feb1c487d4f54ce29ccfdc9ddd154cde5b26140e",
+    "github_repo_url": "https://github.com/idurar/mern-admin"
+  },
+  "servers": [
+    {
+      "url": "https://api.example.com"
+    }
+  ],
+  "paths": {
+    "/port": {
+      "get": {
+        "summary": "Get the application's server port",
+        "api_description": "This endpoint returns the current port number on which the server is running. There are no parameters required. This endpoint is typically used for server status checks or diagnostics and does not expose sensitive or confidential information.",
+        "tags": [
+          "Servers"
+        ],
+        "authorization_tag": "Authorization Not Required",
+        "module_tag": "server",
+        "sensitive_information": false,
+        "responses": {
+          "200": {
+            "description": "Port information returned successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "port": {
+                      "type": "integer",
+                      "description": "The port number the server is listening on.",
+                      "example": 3000
+                    }
+                  },
+                  "required": [
+                    "port"
+                  ]
+                },
+                "examples": {
+                  "success": {
+                    "summary": "Example server port response",
+                    "value": {
+                      "port": 3000
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Server port information not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Port information not available"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Bad Request"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/env": {
+      "get": {
+        "summary": "Retrieve Application Environment",
+        "api_description": "This endpoint returns the current Node.js application environment (for example, 'development', 'production', or 'test'). Useful for checking deployment or runtime context. No request parameters are required or accepted. Typically used for debugging or status checks; avoid exposing in production environments.",
+        "tags": [
+          "Environments"
+        ],
+        "authorization_tag": "Authorization Not Required",
+        "module_tag": "env",
+        "sensitive_information": false,
+        "responses": {
+          "200": {
+            "description": "Current environment returned successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "env": {
+                      "type": "string",
+                      "description": "Current Node environment. Typical values: 'development', 'production', 'test'.",
+                      "example": "development"
+                    }
+                  },
+                  "required": [
+                    "env"
+                  ]
+                },
+                "example": {
+                  "env": "development"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Environment variable not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Environment variable not found"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                },
+                "example": {
+                  "error": "Environment variable not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/create": {
+      "post": {
+        "summary": "Create a New Admin User",
+        "api_description": "This endpoint allows for the creation of a new administrator account. The requester must provide the necessary details such as name, email, and password. All fields must adhere to length and format restrictions: 'email' must be a valid email address and unique in the system, 'password' must be at least 8 characters, and 'name' cannot be blank. Designed for privileged onboarding of new admin users. Only accessible by an authorized administrator.",
+        "tags": [
+          "Admins"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Full name of the admin user.",
+                    "minLength": 1
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Unique email address of the admin user."
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "description": "Password for the admin user account. Must be at least 8 characters.",
+                    "minLength": 8
+                  }
+                },
+                "required": [
+                  "name",
+                  "email",
+                  "password"
+                ]
+              },
+              "example": {
+                "name": "Alice Smith",
+                "email": "alice.smith@domain.com",
+                "password": "StrongPass123!"
+              }
+            }
+          }
+        },
+        "authorization_tag": "Authorization Required",
+        "module_tag": "adminController",
+        "auth_tag": "",
+        "sensitive_information": true,
+        "responses": {
+          "201": {
+            "description": "Admin user created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Unique identifier for the new admin user.",
+                      "example": "64c0f5ed4392a1ae52a908d6"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Alice Smith"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "example": "alice.smith@domain.com"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-06-10T14:55:20.231Z"
+                    },
+                    "role": {
+                      "type": "string",
+                      "example": "admin"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request; malformed input data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "The request body must include name, email, and password."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity; input validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Email address already in use."
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Password must be at least 8 characters."
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Email format is invalid."
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. Authentication credentials were missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Authentication required."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden. User does not have permission to create admins.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Insufficient privileges to perform this action."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/read/{id}": {
+      "get": {
+        "summary": "Read Admin Details by ID",
+        "api_description": "Retrieves the details of a specific admin user by their unique identifier. The `id` parameter must be a valid string representing the unique identifier assigned to the admin. If the specified admin does not exist, a 404 is returned. This endpoint is intended for administrative purposes, and may expose personally identifiable information (PII) associated with the admin user. Use this endpoint responsibly.",
+        "tags": [
+          "Admins"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the admin to be retrieved.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "abc123def456"
+            }
+          }
+        ],
+        "authorization_tag": "Authorization Required",
+        "module_tag": "adminController",
+        "auth_tag": "",
+        "sensitive_information": true,
+        "responses": {
+          "200": {
+            "description": "Admin details retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Unique identifier for the admin.",
+                      "example": "abc123def456"
+                    },
+                    "email": {
+                      "type": "string",
+                      "description": "The admin's email address.",
+                      "format": "email",
+                      "example": "admin@example.com"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "The admin's full name.",
+                      "example": "Jane Doe"
+                    },
+                    "role": {
+                      "type": "string",
+                      "description": "Role assigned to the admin.",
+                      "example": "superadmin"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Date and time when the admin was created.",
+                      "example": "2023-09-01T12:23:45.000Z"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "email",
+                    "name",
+                    "role",
+                    "createdAt"
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "id": "abc123def456",
+                      "email": "admin@example.com",
+                      "name": "Jane Doe",
+                      "role": "superadmin",
+                      "createdAt": "2023-09-01T12:23:45.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. The provided admin ID is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid admin ID format."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found. No admin found with the specified ID.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Admin not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/update/{id}": {
+      "patch": {
+        "summary": "Update Admin User",
+        "api_description": "Updates the properties of an existing admin user identified by their unique ID. The endpoint expects the ID as a path parameter. The request body must supply one or more valid admin fields to update (such as name, email, status). All fields will be validated for type and business logic; email must be in a proper format. Only provided fields will be updated. Invalid IDs, missing or malformed data, or non-existent users will return respective errors.",
+        "tags": [
+          "Admins"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Unique identifier of the admin user to update. Must be a string, typically a 24-character MongoDB ObjectId.",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "60ad0cedf25e410026b3f5b1"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The admin's full name.",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "The admin's email address.",
+                    "example": "admin@example.com"
+                  },
+                  "status": {
+                    "type": "string",
+                    "description": "Admin account status (e.g., active, suspended, disabled).",
+                    "enum": [
+                      "active",
+                      "suspended",
+                      "disabled"
+                    ],
+                    "example": "active"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "examples": {
+                "updateNameAndStatus": {
+                  "summary": "Update name and status",
+                  "value": {
+                    "name": "Jane Doe",
+                    "status": "suspended"
+                  }
+                },
+                "updateEmail": {
+                  "summary": "Update email only",
+                  "value": {
+                    "email": "jane.doe@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "authorization_tag": "Authorization Required",
+        "module_tag": "adminController",
+        "auth_tag": "",
+        "sensitive_information": true,
+        "responses": {
+          "200": {
+            "description": "Admin user updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Admin updated successfully."
+                    },
+                    "admin": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "60ad0cedf25e410026b3f5b1"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Jane Doe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "jane.doe@example.com"
+                        },
+                        "status": {
+                          "type": "string",
+                          "example": "active"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2024-04-08T14:25:43.511Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Validation failed for the request body or parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid email format."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Admin user not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Admin user not found."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity. Provided data cannot be processed, such as duplicate email or business rule conflict.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Email already in use."
+                        }
+                      }
+                    },
+                    {
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Cannot change status to disabled for super admin."
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/delete/{id}": {
+      "delete": {
+        "summary": "Delete Admin User by ID",
+        "api_description": "Deletes an admin user from the system based on their unique identifier. Only authorized users can perform this action. The 'id' parameter in the path must be a valid database identifier (typically a UUID or database-specific string). The operation is irreversible and will remove all associated data for the given admin user. If the requested id does not exist, a 404 error is returned. If the id is malformed or missing, a 400 error is returned.",
+        "tags": [
+          "Admins"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Unique identifier of the admin user to be deleted. Must be a valid non-empty string.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "example": "62f5b1cd8fecb81b233eae98"
+            }
+          }
+        ],
+        "authorization_tag": "Authorization Required",
+        "module_tag": "adminController",
+        "sensitive_information": true,
+        "responses": {
+          "200": {
+            "description": "Admin user deleted successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Admin user deleted successfully"
+                    },
+                    "deletedId": {
+                      "type": "string",
+                      "example": "62f5b1cd8fecb81b233eae98"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid admin user ID supplied.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid admin user ID"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Admin user with provided ID does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Admin user not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity - Unable to delete admin user due to database constraints or internal error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Failed to delete admin user due to database error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/search": {
+      "get": {
+        "summary": "Search Admin Entities",
+        "api_description": "This endpoint allows administrators to search for admin-related entities based on optional query parameters. Supported parameters are 'q' for general search term, 'page' for pagination, and 'limit' to specify page size. Only accessible by authorized admin users. Parameter constraints: 'q' is a string (1-100 chars), 'page' is a positive integer (default 1), 'limit' is a positive integer (default 20, max 100).",
+        "tags": [
+          "Admins"
+        ],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Search query string between 1 and 100 characters.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "required": false,
+            "example": "john"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for pagination. Must be a positive integer. Default is 1.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "required": false,
+            "example": 1
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of results per page. Must be a positive integer; max 100. Default is 20.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            },
+            "required": false,
+            "example": 20
+          }
+        ],
+        "authorization_tag": "Authorization Required",
+        "module_tag": "adminController",
+        "sensitive_information": true,
+        "responses": {
+          "200": {
+            "description": "Search results matching the criteria",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "ad1234"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Admin User"
+                          },
+                          "email": {
+                            "type": "string",
+                            "format": "email",
+                            "example": "admin@example.com"
+                          },
+                          "role": {
+                            "type": "string",
+                            "example": "superadmin"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "active",
+                              "inactive",
+                              "suspended"
+                            ],
+                            "example": "active"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "email",
+                          "role",
+                          "status"
+                        ]
+                      },
+                      "example": [
+                        {
+                          "id": "ad1234",
+                          "name": "Admin User",
+                          "email": "admin@example.com",
+                          "role": "superadmin",
+                          "status": "active"
+                        }
+                      ]
+                    },
+                    "page": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "example": 20
+                    },
+                    "total": {
+                      "type": "integer",
+                      "example": 41
+                    }
+                  },
+                  "required": [
+                    "results",
+                    "page",
+                    "limit",
+                    "total"
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "summary": "Example Admin Results",
+                    "value": {
+                      "results": [
+                        {
+                          "id": "ad1234",
+                          "name": "Admin User",
+                          "email": "admin@example.com",
+                          "role": "superadmin",
+                          "status": "active"
+                        }
+                      ],
+                      "page": 1,
+                      "limit": 20,
+                      "total": 41
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameter provided (bad request)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid 'limit' parameter: must be a number between 1 and 100."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - authentication failed or missing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Unauthorized. Please provide a valid admin token."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No search results found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "No admin results found matching your query."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity - invalid search term",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Search term too short."
+                        }
+                      }
+                    },
+                    {
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Malformed search query."
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/list": {
+      "get": {
+        "summary": "List All Administrators",
+        "api_description": "Retrieves a list of all administrator accounts in the system. This endpoint provides detailed information about each admin, such as their unique identifier, name, and email. Optional query parameters may support basic pagination and filtering by email or name. The response includes only non-sensitive profile information for each admin. This endpoint should be protected and accessible only to authenticated users with sufficient permissions.",
+        "tags": [
+          "Admins"
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of admins to return per page (default is 20, max is 100).",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            },
+            "example": 20
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Number of admins to skip before starting to collect the result set (for pagination).",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            },
+            "example": 0
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "description": "Filter admins by email address (partial or full match).",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "admin@example.com"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Filter admins by name (partial or full match).",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "John"
+          }
+        ],
+        "authorization_tag": "Authorization Required",
+        "module_tag": "adminController",
+        "sensitive_information": false,
+        "responses": {
+          "200": {
+            "description": "List of admins retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "admins": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Unique identifier for the admin."
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Name of the admin."
+                          },
+                          "email": {
+                            "type": "string",
+                            "format": "email",
+                            "description": "Email address of the admin."
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the admin was created."
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "email",
+                          "createdAt"
+                        ]
+                      },
+                      "description": "List of admin users."
+                    },
+                    "total": {
+                      "type": "integer",
+                      "description": "Total number of admins available for the query."
+                    }
+                  },
+                  "required": [
+                    "admins",
+                    "total"
+                  ]
+                },
+                "examples": {
+                  "success": {
+                    "summary": "A successful response",
+                    "value": {
+                      "admins": [
+                        {
+                          "id": "5f56c7e5ccf1ab23ad9d7841",
+                          "name": "Alice Johnson",
+                          "email": "alice.johnson@company.com",
+                          "createdAt": "2024-06-09T15:12:30Z"
+                        },
+                        {
+                          "id": "5f56c7e5ccf1ab23ad9d7842",
+                          "name": "Bob Lee",
+                          "email": "bob.lee@company.com",
+                          "createdAt": "2024-06-02T10:00:11Z"
+                        }
+                      ],
+                      "total": 2
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. One or more query parameters are invalid (e.g., limit is too high).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid query parameter: limit exceeds maximum value of 100."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. Authentication is required to access this endpoint.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Authentication required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden. The requester does not have sufficient permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "You do not have access to list admin users."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found. No admin users match the filter criteria.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "No admin users found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/password-update/{id}": {
+      "patch": {
+        "summary": "Update an Admin User's Password",
+        "api_description": "Allows an administrator to update the password for a given admin user account by specifying the admin's unique identifier in the URL path. The new password must meet minimum length and complexity requirements. This endpoint expects the current password and the new password in the request body. Both fields are required. The new password must be at least 8 characters long and contain letters and numbers. The endpoint requires authentication and returns an error if the user is unauthorized, if validation fails, or if the admin user is not found.",
+        "tags": [
+          "Admins"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the admin whose password will be updated.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "60c72b2f9fd7a2b1234abcd7"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "currentPassword": {
+                    "type": "string",
+                    "minLength": 8,
+                    "description": "The admin's current password."
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "minLength": 8,
+                    "pattern": "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$",
+                    "description": "The new password. Must be at least 8 characters and contain both letters and numbers."
+                  }
+                },
+                "required": [
+                  "currentPassword",
+                  "newPassword"
+                ],
+                "example": {
+                  "currentPassword": "oldpass123",
+                  "newPassword": "NewPass456"
+                }
+              }
+            }
+          }
+        },
+        "authorization_tag": "Authorization Required",
+        "module_tag": "adminController",
+        "auth_tag": "",
+        "sensitive_information": true,
+        "responses": {
+          "200": {
+            "description": "Password updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Password has been updated successfully."
+                    }
+                  },
+                  "example": {
+                    "message": "Password has been updated successfully."
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation or Input Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "New password does not meet criteria."
+                    }
+                  },
+                  "example": {
+                    "error": "New password does not meet criteria."
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing authorization token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Unauthorized. Please provide a valid token."
+                    }
+                  },
+                  "example": {
+                    "error": "Unauthorized. Please provide a valid token."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Admin User Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Admin user not found."
+                    }
+                  },
+                  "example": {
+                    "error": "Admin user not found."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity - Password update failed due to invalid input or state",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Current password is incorrect."
+                    }
+                  },
+                  "example": {
+                    "error": "Current password is incorrect."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/client/create": {
+      "post": {
+        "summary": "Create a New Client",
+        "api_description": "This endpoint creates a new client resource in the system. The request body must contain all required client information. Fields such as email must be unique and properly formatted. All fields are validated strictly before client creation. On success, returns the created client object.",
+        "tags": [
+          "Clients"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Full name of the client.",
+                    "minLength": 1
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Unique email address for the client."
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "Phone number of the client, may include country code. May be omitted.",
+                    "minLength": 5
+                  },
+                  "address": {
+                    "type": "string",
+                    "description": "Full address of the client. Optional."
+                  }
+                },
+                "required": [
+                  "name",
+                  "email"
+                ]
+              },
+              "examples": {
+                "default": {
+                  "value": {
+                    "name": "Jane Doe",
+                    "email": "jane.doe@example.com",
+                    "phone": "+1234567890",
+                    "address": "123 Main St, Springfield, USA"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "authorization_tag": "Authorization Not Required",
+        "module_tag": "clientController",
+        "sensitive_information": true,
+        "responses": {
+          "201": {
+            "description": "Client created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Unique identifier for the newly created client.",
+                      "example": "clnt_b763f3251f"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Jane Doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "example": "jane.doe@example.com"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "example": "+1234567890"
+                    },
+                    "address": {
+                      "type": "string",
+                      "example": "123 Main St, Springfield, USA"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-06-11T13:27:00Z"
+                    }
+                  }
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "id": "clnt_b763f3251f",
+                      "name": "Jane Doe",
+                      "email": "jane.doe@example.com",
+                      "phone": "+1234567890",
+                      "address": "123 Main St, Springfield, USA",
+                      "createdAt": "2024-06-11T13:27:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Missing or invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid email address format."
+                    }
+                  }
+                },
+                "examples": {
+                  "missing_name": {
+                    "value": {
+                      "error": "The 'name' field is required."
+                    }
+                  },
+                  "invalid_email": {
+                    "value": {
+                      "error": "Invalid email address format."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict - Email already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "A client with this email already exists."
+                    }
+                  }
+                },
+                "examples": {
+                  "email_exists": {
+                    "value": {
+                      "error": "A client with this email already exists."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity - Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Validation error: phone number is too short."
+                    }
+                  }
+                },
+                "examples": {
+                  "phone_short": {
+                    "value": {
+                      "message": "Validation error: phone number is too short."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/client/read/{id}": {
+      "get": {
+        "summary": "Retrieve Client Details by ID",
+        "api_description": "Fetches the details of a single client based on the client's unique identifier. The endpoint expects a valid client ID as a path parameter. The client ID should be a non-empty string matching the unique identifier format used within the system (typically a MongoDB ObjectId or UUID). If the client with the given ID does not exist, a 404 response is returned. Badly formatted IDs or missing IDs will result in a 400 error. No sensitive information (such as passwords or financial data) is returned in the response.",
+        "tags": [
+          "Clients"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique identifier of the client. Expected to be a string matching a MongoDB ObjectId (24 hex characters) or UUID.",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$|^[0-9a-fA-F-]{36}$"
+            },
+            "example": "507f1f77bcf86cd799439011"
+          }
+        ],
+        "authorization_tag": "Authorization Not Required",
+        "module_tag": "clientController",
+        "sensitive_information": false,
+        "responses": {
+          "200": {
+            "description": "Client details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Unique identifier for the client"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Full name of the client"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "Email address of the client"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "description": "Client's phone number"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Timestamp of client creation"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Timestamp of last client update"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "email",
+                    "createdAt",
+                    "updatedAt"
+                  ],
+                  "example": {
+                    "id": "507f1f77bcf86cd799439011",
+                    "name": "John Doe",
+                    "email": "johndoe@example.com",
+                    "phone": "+1-555-123-4567",
+                    "createdAt": "2023-12-01T10:20:30.400Z",
+                    "updatedAt": "2024-01-15T08:45:12.123Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid client ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid client ID format"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Client not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Client not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/client/update/{id}": {
+      "patch": {
+        "summary": "Update Client Details",
+        "api_description": "This endpoint updates the details of an existing client record based on the provided client ID. Only the fields included in the request body will be updated; other fields will remain unchanged. The client ID is required as a path parameter and must be a valid string identifier. The request body can include any subset of allowed fields for updating a client's profile. Attempting to update a non-existent client will result in a 404 response. All requests must supply at least one updatable field.",
+        "tags": [
+          "Clients"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the client to update.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "507f1f77bcf86cd799439011"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The full name of the client.",
+                    "example": "Jane Smith"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "The email address of the client.",
+                    "format": "email",
+                    "example": "jane.smith@example.com"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "The phone number of the client (E.164 format recommended).",
+                    "example": "+15551234567"
+                  },
+                  "address": {
+                    "type": "string",
+                    "description": "The mailing address of the client.",
+                    "example": "123 Main St, Springfield, USA"
+                  },
+                  "active": {
+                    "type": "boolean",
+                    "description": "Whether the client account is currently active.",
+                    "example": true
+                  }
+                },
+                "minProperties": 1,
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "authorization_tag": "Authorization Required",
+        "module_tag": "clientController",
+        "auth_tag": "",
+        "sensitive_information": true,
+        "responses": {
+          "200": {
+            "description": "Client updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "507f1f77bcf86cd799439011"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Jane Smith"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "jane.smith@example.com"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "example": "+15551234567"
+                    },
+                    "address": {
+                      "type": "string",
+                      "example": "123 Main St, Springfield, USA"
+                    },
+                    "active": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                "examples": {
+                  "successful_update": {
+                    "summary": "Successful update response",
+                    "value": {
+                      "id": "507f1f77bcf86cd799439011",
+                      "name": "Jane Smith",
+                      "email": "jane.smith@example.com",
+                      "phone": "+15551234567",
+                      "address": "123 Main St, Springfield, USA",
+                      "active": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid email format"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Client not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Client not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity (e.g., no fields to update or constraint violation)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "No updatable fields provided"
+                        }
+                      }
+                    },
+                    {
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Email already exists for another client"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/client/delete/{id}": {
+      "delete": {
+        "summary": "Delete a Client",
+        "api_description": "Deletes a client resource identified by the unique client ID provided as a path parameter. The ID must be a valid database identifier (e.g., a MongoDB ObjectId or integer). This endpoint is typically used by administrators or authorized personnel to remove a client from the system. Deletion is irreversible. Attempting to delete a non-existent client will return a 404 error.",
+        "tags": [
+          "Clients"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier for the client to be deleted. Must be a valid ID string (e.g., a 24-character hex string for MongoDB ObjectId).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "5f4dcc3b5aa765d61d8327de"
+            }
+          }
+        ],
+        "authorization_tag": "Authorization Required",
+        "module_tag": "clientController",
+        "auth_tag": "",
+        "sensitive_information": true,
+        "responses": {
+          "200": {
+            "description": "Client deleted successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Client deleted successfully."
+                    },
+                    "deletedClientId": {
+                      "type": "string",
+                      "example": "5f4dcc3b5aa765d61d8327de"
+                    }
+                  }
+                },
+                "example": {
+                  "message": "Client deleted successfully.",
+                  "deletedClientId": "5f4dcc3b5aa765d61d8327de"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid client ID provided.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid client id format."
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Invalid client id format."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Client not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Client not found."
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Client not found."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity (cannot delete client due to constraints).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Client cannot be deleted due to linked active projects."
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Client cannot be deleted due to linked active projects."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/client/search": {
+      "get": {
+        "summary": "Search Clients",
+        "api_description": "Retrieves a list of clients matching search criteria. This endpoint allows users to search for clients using query parameters such as name, email, or status. Results are paginated, and a maximum of 100 clients can be returned per request. Search parameters are optional but at least one filter is recommended for precise results. All string parameters are case-insensitive, and partial matches are supported for the 'name' and 'email' parameters.",
+        "tags": [
+          "Clients"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Partial or full name of the client to search for. Case-insensitive. Optional.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "example": "John"
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "description": "Partial or full email address of the client. Case-insensitive. Optional.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "email",
+              "example": "john@example.com"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Status of the client (e.g., 'active', 'inactive'). Optional.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "active",
+                "inactive",
+                "pending"
+              ],
+              "example": "active"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number of results (pagination). Optional. Default is 1.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "example": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of results per page (pagination). Optional. Default is 20. Maximum is 100.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "example": 20
+            }
+          }
+        ],
+        "authorization_tag": "Authorization Not Required",
+        "module_tag": "clientController",
+        "sensitive_information": false,
+        "responses": {
+          "200": {
+            "description": "List of clients matching the search criteria.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "clnt_01HGZJY72J"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "John Doe"
+                          },
+                          "email": {
+                            "type": "string",
+                            "format": "email",
+                            "example": "john.doe@example.com"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "active",
+                              "inactive",
+                              "pending"
+                            ],
+                            "example": "active"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2024-05-17T08:15:42Z"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "email",
+                          "status",
+                          "createdAt"
+                        ]
+                      },
+                      "example": [
+                        {
+                          "id": "clnt_01HGZJY72J",
+                          "name": "John Doe",
+                          "email": "john.doe@example.com",
+                          "status": "active",
+                          "createdAt": "2024-05-17T08:15:42Z"
+                        },
+                        {
+                          "id": "clnt_01HF4J1A7S",
+                          "name": "Jane Smith",
+                          "email": "jane.smith@company.com",
+                          "status": "inactive",
+                          "createdAt": "2024-04-25T13:57:18Z"
+                        }
+                      ]
+                    },
+                    "page": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "example": 20
+                    },
+                    "total": {
+                      "type": "integer",
+                      "example": 2
+                    }
+                  },
+                  "required": [
+                    "results",
+                    "page",
+                    "limit",
+                    "total"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameter(s).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid email format"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No clients found matching the criteria.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "No clients found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity (e.g., query parameters out of range).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Limit must not exceed 100"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/client/list": {
+      "get": {
+        "summary": "Get List of Clients",
+        "api_description": "Retrieves a paginated list of client records from the system. This endpoint supports optional pagination and search query parameters. If no query parameters are provided, all clients are returned subject to system-enforced defaults and limits. Parameters: 'page' (integer, >=1), 'limit' (integer, >=1 and <=100), and 'search' (string, up to 128 characters) are accepted as query parameters.\n\nThe response contains an array of clients, each with unique identifiers and profile information. No authentication is required. No sensitive information is returned.",
+        "tags": [
+          "Clients"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "required": false,
+            "description": "Page number for paginated results (must be integer >=1)."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            },
+            "required": false,
+            "description": "Number of clients per page (must be integer between 1 and 100)."
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string",
+              "maxLength": 128
+            },
+            "required": false,
+            "description": "Search term to filter clients by name or email (max 128 characters)."
+          }
+        ],
+        "authorization_tag": "Authorization Not Required",
+        "module_tag": "clientController",
+        "sensitive_information": false,
+        "responses": {
+          "200": {
+            "description": "A paginated array of client objects.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "clients": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "cl_001"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Acme Corporation"
+                          },
+                          "email": {
+                            "type": "string",
+                            "format": "email",
+                            "example": "info@acme-corp.com"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2023-07-10T09:30:12.002Z"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "email",
+                          "createdAt"
+                        ]
+                      }
+                    },
+                    "total": {
+                      "type": "integer",
+                      "example": 56,
+                      "description": "Total number of clients matching the query."
+                    },
+                    "page": {
+                      "type": "integer",
+                      "example": 1,
+                      "description": "Current page number."
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "example": 20,
+                      "description": "Number of clients per page."
+                    }
+                  },
+                  "required": [
+                    "clients",
+                    "total",
+                    "page",
+                    "limit"
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "summary": "Paginated list of clients",
+                    "value": {
+                      "clients": [
+                        {
+                          "id": "cl_001",
+                          "name": "Acme Corporation",
+                          "email": "info@acme-corp.com",
+                          "createdAt": "2023-07-10T09:30:12.002Z"
+                        },
+                        {
+                          "id": "cl_002",
+                          "name": "Globex Inc.",
+                          "email": "contact@globex.com",
+                          "createdAt": "2023-06-22T12:11:40.113Z"
+                        }
+                      ],
+                      "total": 56,
+                      "page": 1,
+                      "limit": 20
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Invalid query parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid parameter: limit must be between 1 and 100"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "summary": "Limit parameter too high",
+                    "value": {
+                      "error": "Invalid parameter: limit must be between 1 and 100"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No clients found matching the criteria.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "No clients found"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lead/create": {
+      "post": {
+        "summary": "Create a New Lead",
+        "api_description": "This endpoint allows clients to create a new lead by submitting lead details such as name, email, phone, company, and an optional message. All input must be properly formatted; the email must be valid and unique, phone numbers should be numeric strings with optional plus sign and must be between 7 and 20 digits, and name is required. The endpoint does not require authentication. Sensitive customer contact information is involved, so secure transport (HTTPS) is recommended.",
+        "tags": [
+          "Leads"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Full name of the lead.",
+                    "minLength": 1,
+                    "example": "Jane Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "Email address of the lead (must be valid and unique).",
+                    "format": "email",
+                    "example": "jane.doe@example.com"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "Phone number of the lead. Can include '+' and must be between 7 and 20 digits.",
+                    "pattern": "^\\+?\\d{7,20}$",
+                    "example": "+12345678901"
+                  },
+                  "company": {
+                    "type": "string",
+                    "description": "Company or organization name (optional).",
+                    "example": "Acme Corporation"
+                  },
+                  "message": {
+                    "type": "string",
+                    "description": "An optional message from the lead.",
+                    "example": "Looking for more information about your platform."
+                  }
+                },
+                "required": [
+                  "name",
+                  "email",
+                  "phone"
+                ]
+              },
+              "examples": {
+                "application/json": {
+                  "summary": "Lead Creation Example",
+                  "value": {
+                    "name": "Jane Doe",
+                    "email": "jane.doe@example.com",
+                    "phone": "+12345678901",
+                    "company": "Acme Corporation",
+                    "message": "Looking for more information about your platform."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "authorization_tag": "Authorization Not Required",
+        "module_tag": "leadController",
+        "sensitive_information": true,
+        "responses": {
+          "200": {
+            "description": "Lead created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "ID of the newly created lead."
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Full name of the lead."
+                    },
+                    "email": {
+                      "type": "string",
+                      "description": "Email of the lead."
+                    },
+                    "phone": {
+                      "type": "string",
+                      "description": "Phone number of the lead."
+                    },
+                    "company": {
+                      "type": "string",
+                      "description": "Company of the lead."
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Optional message from the lead."
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Timestamp of creation."
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "email",
+                    "phone",
+                    "createdAt"
+                  ]
+                },
+                "examples": {
+                  "application/json": {
+                    "summary": "Successful Creation Example",
+                    "value": {
+                      "id": "le_abc123",
+                      "name": "Jane Doe",
+                      "email": "jane.doe@example.com",
+                      "phone": "+12345678901",
+                      "company": "Acme Corporation",
+                      "message": "Looking for more information about your platform.",
+                      "createdAt": "2024-06-01T10:53:42.652Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. The request body is malformed or missing required fields.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Missing required field: name"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation error such as duplicate email, invalid email, or badly formatted phone number.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Email address is invalid."
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Email address already used."
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Phone number format is incorrect."
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lead/read/{id}": {
+      "get": {
+        "summary": "Read Lead by ID",
+        "api_description": "Retrieves a single lead by its unique identifier. The provided ID in the path parameter must be a valid string representing the lead's unique record. Returns the full details of the lead if it exists. If the ID is invalid or the lead is not found, an appropriate error is returned.",
+        "tags": [
+          "Leads"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique identifier of the lead to retrieve.",
+            "schema": {
+              "type": "string",
+              "example": "64e3a80ea8e64910abc12345"
+            }
+          }
+        ],
+        "authorization_tag": "Authorization Not Required",
+        "module_tag": "leadController",
+        "sensitive_information": false,
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved lead details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Unique identifier of the lead.",
+                      "example": "64e3a80ea8e64910abc12345"
+                    },
+                    "firstName": {
+                      "type": "string",
+                      "description": "First name of the lead.",
+                      "example": "Jane"
+                    },
+                    "lastName": {
+                      "type": "string",
+                      "description": "Last name of the lead.",
+                      "example": "Doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "description": "Email address of the lead.",
+                      "example": "jane.doe@example.com"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "description": "Phone number of the lead.",
+                      "example": "+12223334444"
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Current status of the lead.",
+                      "example": "Open"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Lead creation timestamp.",
+                      "example": "2024-06-30T15:20:33.561Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Lead update timestamp.",
+                      "example": "2024-06-30T15:25:10.100Z"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "firstName",
+                    "lastName",
+                    "email",
+                    "status",
+                    "createdAt",
+                    "updatedAt"
+                  ]
+                },
+                "examples": {
+                  "success": {
+                    "summary": "Example lead",
+                    "value": {
+                      "id": "64e3a80ea8e64910abc12345",
+                      "firstName": "Jane",
+                      "lastName": "Doe",
+                      "email": "jane.doe@example.com",
+                      "phone": "+12223334444",
+                      "status": "Open",
+                      "createdAt": "2024-06-30T15:20:33.561Z",
+                      "updatedAt": "2024-06-30T15:25:10.100Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid lead ID format.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid lead ID."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Lead not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Lead not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lead/update/{id}": {
+      "patch": {
+        "summary": "Update a Lead by ID",
+        "api_description": "This endpoint allows updating an existing lead's information by their unique identifier. The patch request supports updating any subset of the lead's fields such as name, email, phone, company, or status. The 'id' parameter must be a valid lead identifier. Only fields provided in the request body will be updated, and validations are applied to ensure correct data types and formats. If no fields are provided in the request body, the request will return a 400 error.",
+        "tags": [
+          "Leads"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique identifier of the lead to update.",
+            "schema": {
+              "type": "string",
+              "example": "64b203d7eceeead19642f91c"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Updated name of the lead.",
+                    "example": "Jane Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Updated email address of the lead.",
+                    "example": "jane.doe@example.com"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "Updated phone number of the lead (digits, dashes, spaces allowed).",
+                    "example": "+1-555-123-4567"
+                  },
+                  "company": {
+                    "type": "string",
+                    "description": "Updated company name of the lead.",
+                    "example": "Globex Corp."
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "new",
+                      "contacted",
+                      "qualified",
+                      "lost",
+                      "customer"
+                    ],
+                    "description": "Updated status of the lead."
+                  }
+                },
+                "additionalProperties": false,
+                "minProperties": 1
+              },
+              "examples": {
+                "example-1": {
+                  "summary": "Partial update",
+                  "value": {
+                    "status": "qualified",
+                    "company": "Globex Corp."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "authorization_tag": "Authorization Required",
+        "module_tag": "leadController",
+        "sensitive_information": true,
+        "responses": {
+          "200": {
+            "description": "Lead updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "lead": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "64b203d7eceeead19642f91c"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Jane Doe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email",
+                          "example": "jane.doe@example.com"
+                        },
+                        "phone": {
+                          "type": "string",
+                          "example": "+1-555-123-4567"
+                        },
+                        "company": {
+                          "type": "string",
+                          "example": "Globex Corp."
+                        },
+                        "status": {
+                          "type": "string",
+                          "example": "qualified"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - No update fields provided or invalid input.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "At least one field is required for update."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Lead does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Lead not found."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity - Invalid field values.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Invalid email format."
+                        }
+                      }
+                    },
+                    {
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Status value is not supported."
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lead/delete/{id}": {
+      "delete": {
+        "summary": "Delete a Lead by ID",
+        "api_description": "This endpoint permanently deletes a lead specified by its unique identifier 'id'. The 'id' parameter is required, must be a valid string representing the lead's ID, and must refer to an existing lead. If the lead does not exist or deletion is not possible, appropriate error responses are returned. Use with caution as this operation is irreversible.",
+        "tags": [
+          "Leads"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Unique identifier of the lead to delete.",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9_-]{1,64}$",
+              "example": "5f2d7be1e87b2c6e3bc13e3f"
+            }
+          }
+        ],
+        "authorization_tag": "Authorization Required",
+        "module_tag": "leadController",
+        "sensitive_information": true,
+        "responses": {
+          "200": {
+            "description": "Lead deleted successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Lead deleted successfully."
+                    },
+                    "deletedLeadId": {
+                      "type": "string",
+                      "example": "5f2d7be1e87b2c6e3bc13e3f"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "summary": "Lead deleted successfully",
+                    "value": {
+                      "message": "Lead deleted successfully.",
+                      "deletedLeadId": "5f2d7be1e87b2c6e3bc13e3f"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid lead ID supplied.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid lead ID format."
+                    }
+                  }
+                },
+                "examples": {
+                  "invalid_id": {
+                    "summary": "Invalid ID format",
+                    "value": {
+                      "error": "Invalid lead ID format."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Lead not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Lead not found."
+                    }
+                  }
+                },
+                "examples": {
+                  "not_found": {
+                    "summary": "Lead not found",
+                    "value": {
+                      "error": "Lead not found."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity. The lead cannot be deleted due to business logic (e.g., lead is already archived or locked).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Lead cannot be deleted because it is locked."
+                    }
+                  }
+                },
+                "examples": {
+                  "locked": {
+                    "summary": "Lead is locked",
+                    "value": {
+                      "error": "Lead cannot be deleted because it is locked."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lead/search": {
+      "get": {
+        "summary": "Search Leads",
+        "api_description": "This endpoint allows searching for leads using a set of optional filters passed as query parameters. Search is typically based on fields such as name, email, status, or other lead attributes. If no filter is provided, all leads may be returned or an empty array depending on implementation. Parameters should be properly formatted strings; improper parameter types may result in validation errors.",
+        "tags": [
+          "Leads"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "A case-insensitive partial or full match on the lead's name."
+            },
+            "example": "John"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "email",
+              "description": "Exact or partial email address of the lead being searched."
+            },
+            "example": "john.doe@example.com"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "new",
+                "contacted",
+                "qualified",
+                "lost",
+                "converted"
+              ],
+              "description": "Filter leads by their current status. Supported values: new, contacted, qualified, lost, converted."
+            },
+            "example": "qualified"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Page number for paginated results. Starts at 1."
+            },
+            "example": 1
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "description": "Maximum number of leads to return per page. Default is 20. Max is 100."
+            },
+            "example": 20
+          }
+        ],
+        "authorization_tag": "Authorization Not Required",
+        "module_tag": "leadController",
+        "sensitive_information": false,
+        "responses": {
+          "200": {
+            "description": "A successful search returning a list of matching leads",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "leads": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Unique identifier for the lead",
+                            "example": "abc123"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Name of the lead",
+                            "example": "John Doe"
+                          },
+                          "email": {
+                            "type": "string",
+                            "format": "email",
+                            "description": "Email address of the lead",
+                            "example": "john.doe@example.com"
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "Current status of the lead",
+                            "example": "qualified"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Date when the lead was added",
+                            "example": "2023-12-15T13:45:30.000Z"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "email",
+                          "status",
+                          "createdAt"
+                        ]
+                      }
+                    },
+                    "total": {
+                      "type": "integer",
+                      "description": "Total number of leads found",
+                      "example": 2
+                    },
+                    "page": {
+                      "type": "integer",
+                      "description": "Current result page number",
+                      "example": 1
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "description": "Items per page",
+                      "example": 20
+                    }
+                  },
+                  "required": [
+                    "leads",
+                    "total",
+                    "page",
+                    "limit"
+                  ]
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "leads": [
+                        {
+                          "id": "abc123",
+                          "name": "John Doe",
+                          "email": "john.doe@example.com",
+                          "status": "qualified",
+                          "createdAt": "2023-12-15T13:45:30.000Z"
+                        },
+                        {
+                          "id": "bcd234",
+                          "name": "Jane Smith",
+                          "email": "jane.smith@example.com",
+                          "status": "new",
+                          "createdAt": "2023-11-20T08:23:15.000Z"
+                        }
+                      ],
+                      "total": 2,
+                      "page": 1,
+                      "limit": 20
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid status value"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "error": "Invalid limit parameter. Must be between 1 and 100."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No leads found matching the criteria",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "leads": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      },
+                      "example": []
+                    },
+                    "total": {
+                      "type": "integer",
+                      "example": 0
+                    },
+                    "page": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "example": 20
+                    }
+                  }
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "leads": [],
+                      "total": 0,
+                      "page": 1,
+                      "limit": 20
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lead/list": {
+      "get": {
+        "summary": "Retrieve a List of Leads",
+        "api_description": "Fetches a list of leads from the system. Supports optional pagination and filtering by query parameters. This endpoint is designed for reading lead information, such as names, contact emails, and associated metadata. Request parameters, if present, are subject to standard pagination limits (e.g., limit must be a positive integer \u2264 100, offset must be zero or positive), and filters must match existing fields. No sensitive personal information is returned through this endpoint.",
+        "tags": [
+          "Leads"
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of leads to return (default: 20, max: 100).",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "example": 20
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Number of leads to skip before starting to collect the results (default: 0).",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "example": 0
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter leads by status (e.g., 'new', 'contacted', 'qualified').",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "qualified"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Keyword to search for in lead names or emails.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "john"
+            }
+          }
+        ],
+        "authorization_tag": "Authorization Not Required",
+        "module_tag": "leadController",
+        "sensitive_information": false,
+        "responses": {
+          "200": {
+            "description": "List of leads successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "total": {
+                      "type": "integer",
+                      "description": "Total number of leads matching the filter criteria.",
+                      "example": 58
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "description": "The number of leads returned in this response.",
+                      "example": 20
+                    },
+                    "offset": {
+                      "type": "integer",
+                      "description": "The number of leads skipped before this response.",
+                      "example": 0
+                    },
+                    "leads": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Unique identifier for the lead.",
+                            "example": "lead_abc123"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Full name of the lead.",
+                            "example": "John Doe"
+                          },
+                          "email": {
+                            "type": "string",
+                            "description": "Primary contact email for the lead.",
+                            "example": "john.doe@example.com"
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "Status of the lead ('new', 'contacted', 'qualified', etc).",
+                            "example": "qualified"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the lead was created.",
+                            "example": "2024-04-30T15:48:00.000Z"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "email",
+                          "status",
+                          "createdAt"
+                        ]
+                      },
+                      "description": "Array of lead objects."
+                    }
+                  },
+                  "required": [
+                    "total",
+                    "limit",
+                    "offset",
+                    "leads"
+                  ]
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "total": 58,
+                      "limit": 10,
+                      "offset": 0,
+                      "leads": [
+                        {
+                          "id": "lead_abc123",
+                          "name": "John Doe",
+                          "email": "john.doe@example.com",
+                          "status": "qualified",
+                          "createdAt": "2024-04-30T15:48:00.000Z"
+                        },
+                        {
+                          "id": "lead_xyz456",
+                          "name": "Jane Smith",
+                          "email": "jane.smith@example.com",
+                          "status": "contacted",
+                          "createdAt": "2024-03-15T11:22:40.000Z"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters (e.g., limit/offset out of range).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid query parameter: limit must be between 1 and 100"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No leads found matching the criteria.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "No leads found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product/create": {
+      "post": {
+        "summary": "Create a New Product",
+        "api_description": "Creates a new product with detailed attributes supplied by the client. All required parameters must be provided in the request body. Product name must be unique. Optional fields like description or category can be omitted. Values for price and stock must be positive; negative or zero values are invalid. Sending extra fields not defined will be ignored.",
+        "tags": [
+          "Products"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The unique name of the product."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Optional description of the product."
+                  },
+                  "price": {
+                    "type": "number",
+                    "minimum": 0.01,
+                    "description": "The price of the product. Must be greater than zero."
+                  },
+                  "stock": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Number of items available in stock. Must be 1 or more."
+                  },
+                  "category": {
+                    "type": "string",
+                    "description": "Optional category for product grouping."
+                  }
+                },
+                "required": [
+                  "name",
+                  "price",
+                  "stock"
+                ],
+                "example": {
+                  "name": "Eco Water Bottle",
+                  "description": "BPA-free reusable bottle, 650ml.",
+                  "price": 14.99,
+                  "stock": 125,
+                  "category": "Kitchen"
+                }
+              }
+            }
+          }
+        },
+        "authorization_tag": "Authorization Not Required",
+        "module_tag": "productController",
+        "sensitive_information": false,
+        "responses": {
+          "200": {
+            "description": "Product created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The unique identifier of the created product.",
+                      "example": "649a1b27e9ae0c003295354e"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Eco Water Bottle"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "BPA-free reusable bottle, 650ml."
+                    },
+                    "price": {
+                      "type": "number",
+                      "example": 14.99
+                    },
+                    "stock": {
+                      "type": "integer",
+                      "example": 125
+                    },
+                    "category": {
+                      "type": "string",
+                      "example": "Kitchen"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-07-01T13:20:50.201Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - validation error in the input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Product name is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity - request is syntactically correct but semantic errors (like duplicate name or negative price/stock)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Product name must be unique"
+                        }
+                      }
+                    },
+                    {
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Price must be greater than zero"
+                        }
+                      }
+                    },
+                    {
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Stock must be 1 or more"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - related resource does not exist (e.g., specified category not found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Category not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product/read/{id}": {
+      "get": {
+        "summary": "Get Product By ID",
+        "api_description": "Retrieves the details of a specific product using its unique identifier. The 'id' path parameter must be a non-empty string representing the product's unique ID. The endpoint reads product information and returns a detailed object or an error if the product is not found or the ID is invalid.",
+        "tags": [
+          "Products"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the product to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "example": "5f68f7429d1d8e0017b25123"
+          }
+        ],
+        "authorization_tag": "Authorization Not Required",
+        "module_tag": "productController",
+        "sensitive_information": false,
+        "responses": {
+          "200": {
+            "description": "Product retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "5f68f7429d1d8e0017b25123",
+                      "description": "The unique ID of the product."
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Bluetooth Headphones",
+                      "description": "The name of the product."
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Wireless over-ear bluetooth headphones with noise cancellation.",
+                      "description": "Detailed description of the product."
+                    },
+                    "price": {
+                      "type": "number",
+                      "format": "float",
+                      "example": 79.99,
+                      "description": "Price of the product in USD."
+                    },
+                    "inStock": {
+                      "type": "boolean",
+                      "example": true,
+                      "description": "Whether the product is in stock."
+                    },
+                    "category": {
+                      "type": "string",
+                      "example": "Electronics",
+                      "description": "Product category."
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "description",
+                    "price",
+                    "inStock",
+                    "category"
+                  ]
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "id": "5f68f7429d1d8e0017b25123",
+                      "name": "Bluetooth Headphones",
+                      "description": "Wireless over-ear bluetooth headphones with noise cancellation.",
+                      "price": 79.99,
+                      "inStock": true,
+                      "category": "Electronics"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Product ID supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid product id format."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Product not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product/update/{id}": {
+      "patch": {
+        "summary": "Update Product by ID",
+        "api_description": "This endpoint allows updating an existing product's details by specifying its unique identifier (`id`) in the path. The request body should contain only the fields to be updated. All fields are optional, but at least one must be provided. The `id` must correspond to an existing product; otherwise, a 404 error will be returned. Example updatable fields include `name`, `description`, and `price`. Validation errors such as invalid price formats (must be a positive number) will result in a 400 or 422 response.",
+        "tags": [
+          "Products"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The unique identifier of the product to be updated."
+            },
+            "description": "Product unique identifier."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The updated name of the product.",
+                    "maxLength": 255,
+                    "example": "Ultimate Widget"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "The updated product description.",
+                    "maxLength": 1024,
+                    "example": "The latest, improved version of our bestselling widget."
+                  },
+                  "price": {
+                    "type": "number",
+                    "format": "float",
+                    "minimum": 0,
+                    "description": "The updated price of the product. Must be a positive number.",
+                    "example": 29.99
+                  },
+                  "inStock": {
+                    "type": "boolean",
+                    "description": "Whether the product is available in stock.",
+                    "example": true
+                  }
+                },
+                "additionalProperties": false,
+                "minProperties": 1
+              },
+              "example": {
+                "name": "Ultimate Widget",
+                "price": 29.99
+              }
+            }
+          }
+        },
+        "authorization_tag": "Authorization Not Required",
+        "module_tag": "productController",
+        "sensitive_information": false,
+        "responses": {
+          "200": {
+            "description": "Product updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Product updated successfully"
+                    },
+                    "product": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "abc123"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Ultimate Widget"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "The latest, improved version of our bestselling widget."
+                        },
+                        "price": {
+                          "type": "number",
+                          "format": "float",
+                          "example": 29.99
+                        },
+                        "inStock": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "At least one field must be provided for update"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Product not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity due to validation errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Price must be a positive number"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Invalid name: must not exceed 255 characters"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product/delete/{id}": {
+      "delete": {
+        "summary": "Delete a Product by ID",
+        "api_description": "Deletes a single product identified by its unique 'id' parameter from the system. The 'id' must be a valid string matching an existing product; otherwise, appropriate error responses will be returned. Only authorized users can perform this operation, and attempts to delete a non-existent product will return an error. This endpoint does not accept a request body.",
+        "tags": [
+          "Products"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the product to be deleted.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "64ffe4bb15fabd8b415122a2"
+            }
+          }
+        ],
+        "authorization_tag": "Authorization Required",
+        "module_tag": "productController",
+        "sensitive_information": false,
+        "responses": {
+          "200": {
+            "description": "Product deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Product successfully deleted"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Product ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid product ID format"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Product not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized Access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Authentication token is missing or invalid"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product/search": {
+      "get": {
+        "summary": "Search Products",
+        "api_description": "This endpoint allows users to search for products by providing various optional query parameters such as name, category, price range, and pagination controls. The search is case-insensitive and will return a paginated list of matching products. All fields are optional, but at least one query parameter should be provided for meaningful results.",
+        "tags": [
+          "Products"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Filter products whose name includes this value (case-insensitive). Optional.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "laptop"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Filter products belonging to the specified category. Optional.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "Electronics"
+            }
+          },
+          {
+            "name": "minPrice",
+            "in": "query",
+            "description": "Minimum price for filtering products. Must be a positive number. Optional.",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "format": "float",
+              "minimum": 0,
+              "example": 100
+            }
+          },
+          {
+            "name": "maxPrice",
+            "in": "query",
+            "description": "Maximum price for filtering products. Must be greater than minPrice, if specified. Optional.",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "format": "float",
+              "minimum": 0,
+              "example": 2000
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "The page number for pagination. Defaults to 1 if not provided. Optional.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "example": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The number of products per page. Defaults to 20. Optional.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "example": 10
+            }
+          }
+        ],
+        "authorization_tag": "Authorization Not Required",
+        "module_tag": "productController",
+        "sensitive_information": false,
+        "responses": {
+          "200": {
+            "description": "Successful search. Returns an array of products matching the criteria.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "prod_12345"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Premium Laptop"
+                          },
+                          "category": {
+                            "type": "string",
+                            "example": "Electronics"
+                          },
+                          "price": {
+                            "type": "number",
+                            "format": "float",
+                            "example": 1499.99
+                          },
+                          "inStock": {
+                            "type": "boolean",
+                            "example": true
+                          },
+                          "description": {
+                            "type": "string",
+                            "example": "A high-performance laptop for professionals."
+                          },
+                          "imageUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "example": "https://example.com/images/laptop.png"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "category",
+                          "price",
+                          "inStock"
+                        ]
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "page": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "limit": {
+                          "type": "integer",
+                          "example": 10
+                        },
+                        "total": {
+                          "type": "integer",
+                          "example": 2
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "summary": "Successful search response",
+                    "value": {
+                      "products": [
+                        {
+                          "id": "prod_12345",
+                          "name": "Premium Laptop",
+                          "category": "Electronics",
+                          "price": 1499.99,
+                          "inStock": true,
+                          "description": "A high-performance laptop for professionals.",
+                          "imageUrl": "https://example.com/images/laptop.png"
+                        },
+                        {
+                          "id": "prod_12346",
+                          "name": "Budget Laptop",
+                          "category": "Electronics",
+                          "price": 499.99,
+                          "inStock": false,
+                          "description": "An affordable laptop for basic tasks.",
+                          "imageUrl": "https://example.com/images/laptop2.png"
+                        }
+                      ],
+                      "pagination": {
+                        "page": 1,
+                        "limit": 10,
+                        "total": 2
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Invalid query parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid input: minPrice must be less than or equal to maxPrice."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity. Required search criteria not provided.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "At least one search parameter must be provided."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No products found matching the criteria.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      },
+                      "example": []
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "page": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "limit": {
+                          "type": "integer",
+                          "example": 10
+                        },
+                        "total": {
+                          "type": "integer",
+                          "example": 0
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "No products found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product/list": {
+      "get": {
+        "summary": "Retrieve Product List",
+        "api_description": "This endpoint retrieves a list of products. Supports optional query parameters for pagination (page, limit) and keyword search. Clients can use 'page' and 'limit' for pagination (default values may be applied if omitted), and 'search' for filtering product names or descriptions. No authorization is required. Parameter limits: 'page' and 'limit' must be positive integers; 'search' must be a string up to 100 characters.",
+        "tags": [
+          "Products"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for pagination. Must be a positive integer.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "example": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of products per page for pagination. Must be a positive integer.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "example": 20
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Keyword to filter products by name or description (max length: 100 characters).",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 100,
+              "example": "laptop"
+            }
+          }
+        ],
+        "authorization_tag": "Authorization Not Required",
+        "module_tag": "productController",
+        "sensitive_information": false,
+        "responses": {
+          "200": {
+            "description": "List of products retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Unique identifier of the product.",
+                            "example": "prod_001"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "The name of the product.",
+                            "example": "Dell Inspiron 15"
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Product description.",
+                            "example": "A versatile 15-inch laptop with responsive performance."
+                          },
+                          "price": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Product price.",
+                            "example": 399.99
+                          },
+                          "currency": {
+                            "type": "string",
+                            "description": "Currency code (ISO 4217).",
+                            "example": "USD"
+                          },
+                          "inStock": {
+                            "type": "boolean",
+                            "description": "Product availability.",
+                            "example": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "description",
+                          "price",
+                          "currency",
+                          "inStock"
+                        ]
+                      }
+                    },
+                    "page": {
+                      "type": "integer",
+                      "description": "Current page number.",
+                      "example": 1
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "description": "Products per page.",
+                      "example": 20
+                    },
+                    "total": {
+                      "type": "integer",
+                      "description": "Total number of products available.",
+                      "example": 52
+                    }
+                  },
+                  "required": [
+                    "products",
+                    "page",
+                    "limit",
+                    "total"
+                  ]
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "products": [
+                        {
+                          "id": "prod_001",
+                          "name": "Dell Inspiron 15",
+                          "description": "A versatile 15-inch laptop with responsive performance.",
+                          "price": 399.99,
+                          "currency": "USD",
+                          "inStock": true
+                        },
+                        {
+                          "id": "prod_002",
+                          "name": "Apple MacBook Pro",
+                          "description": "Powerful laptop for creators with M2 chip.",
+                          "price": 1599.99,
+                          "currency": "USD",
+                          "inStock": false
+                        }
+                      ],
+                      "page": 1,
+                      "limit": 2,
+                      "total": 52
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid value for 'limit': must be a positive integer."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No products found matching the search criteria.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "products": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "page": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "example": 20
+                    },
+                    "total": {
+                      "type": "integer",
+                      "example": 0
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "No products found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "Demo User Login",
+        "api_description": "Allows a demo user to log in via email and password, returning a JWT access token upon successful authentication. Email must be a valid email address, and password must be provided as a non-empty string. The endpoint may respond with a 400 if parameters are missing or invalid, 401 for incorrect credentials, or 200 with a token upon success.",
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "User's email address for login. Must be a valid email address."
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "User's password. Must not be empty."
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "example": {
+                  "email": "demo@example.com",
+                  "password": "ExamplePassword123!"
+                }
+              }
+            }
+          }
+        },
+        "authorization_tag": "Authorization Not Required",
+        "module_tag": "users",
+        "auth_tag": "Auth API",
+        "sensitive_information": true,
+        "responses": {
+          "200": {
+            "description": "Login successful. JWT access token is returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "description": "JWT access token."
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "User's unique identifier.",
+                          "example": "607d1b2f5f1b2c0015b2c5e2"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email",
+                          "description": "User's email address.",
+                          "example": "demo@example.com"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "User's display name.",
+                          "example": "Demo User"
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwN2QxYjJmNWYxYjJjMDAxNWIyYzVlMiIsImVtYWlsIjoiZGVtb0BleGFtcGxlLmNvbSIsIm5hbWUiOiJEZW1vIFVzZXIiLCJpYXQiOjE2MDgwMDAwMDB9.YaEUzXQF53cnrJB09fqGEv7pZlGlrm81SVUwPx_G12s",
+                    "user": {
+                      "id": "607d1b2f5f1b2c0015b2c5e2",
+                      "email": "demo@example.com",
+                      "name": "Demo User"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or invalid request parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Email and password are required."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed due to incorrect credentials.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid email or password."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/logout": {
+      "post": {
+        "summary": "Logout the authenticated user",
+        "api_description": "Logs out the currently authenticated user by invalidating the provided authentication token. Requires a valid bearer token in the Authorization header. No request body is necessary; this endpoint simply ensures that the active session/token is terminated, preventing further access with the same token. It does not accept any payload. If the user is already logged out or the token is invalid/expired, an appropriate error is returned.",
+        "tags": [
+          "Users"
+        ],
+        "authorization_tag": "Authorization Required",
+        "module_tag": "users",
+        "auth_tag": "Auth API",
+        "sensitive_information": false,
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "No request body is expected."
+              },
+              "example": {}
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer authentication token. Example: 'Bearer eyJhbGciOiJIUzI1...'",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^Bearer\\s[\\w\\-\\.]+$"
+            },
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User has been logged out successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully logged out"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                },
+                "example": {
+                  "message": "Successfully logged out"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request due to malformed header or other request issues",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Malformed authorization header"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                },
+                "example": {
+                  "error": "Malformed authorization header"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Token missing, invalid, or expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid or expired token"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                },
+                "example": {
+                  "error": "Invalid or expired token"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
