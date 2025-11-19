@@ -1,0 +1,6 @@
+{
+    "openai_api_key": "",
+    "openai_model": "gpt-4.1-2025-04-14",
+    "api_host": "https://api.example.com",
+    "framework": "express"
+}
