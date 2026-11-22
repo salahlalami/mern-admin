@@ -36,6 +36,7 @@ const adminSchema = new Schema({
   isLoggedIn: {
     type: Boolean,
     required: true,
+    trim: true,
   },
 });
 
